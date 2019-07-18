@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# shellcheck source=bin/lib/common.sh
+# . "${LIB_DIR:-$(cd "${0%/*}/lib"&&pwd)}/common.sh"
+
+export ETH_FROM="0x16fb96a5fa0427af0c8f7cf1eb4870231c8154b6"
+
+export USDT="0xC6708b267177197b15D66689C9EbFb220F286Ba5"
+# ${ETH_FROM:-$(seth rpc eth_coinbase)}
+
+# dappBuild
+
+# create the USDT token for now + PIP_USDT ie DSValue
+# test -z "$USDT" && USDT=$(dapp create USDT "$(seth --to-uint256 "$(seth --to-wei 1000000 ETH)")")
+test -z "$PIP_USDT" && PIP_USDT=$(dapp create DSValue)
+export USDT
+export PIP_USDT
+
+# shellcheck source=/dev/null
+source "$BIN_DIR/deploy-ilk" "USDT" "${1:-"A"}" "GemJoin3" 2
