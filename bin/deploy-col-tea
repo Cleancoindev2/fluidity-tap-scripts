@@ -22,13 +22,9 @@ function write_json_colt {
 EOM
 }
 
-
-
 echo "building may take a while don't exit"
 
 dapp --use solc:0.5.10 build --extract
-
-# ${CUSIP#0x}
 
 USDT=$(seth send --create out/ColTea.bin 'ColTea(string memory,string memory,uint8,bytes9,uint256,uint256,address,uint256)' "USDT" "T" 6 0x393132373934534c34 1 1 0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef 2)
 
@@ -37,7 +33,7 @@ export TOKEN=$USDT
 echo "token address is ${USDT} and name is USDT"
 # echo out the key params of the token that will be fed to other parts later on
 
-NAME=$(seth --to-bytes32 "$(seth --from-ascii "USDT")")
+NAME=$(seth --to-bytes32 "$(seth --from-ascii "USDT-A")")
 echo "bytes32 name is ${NAME}"
 
 echo "supply is $(seth --to-dec $(seth call $USDT "totalSupply()"))"

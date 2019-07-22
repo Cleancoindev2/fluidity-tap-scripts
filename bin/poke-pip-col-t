@@ -35,11 +35,11 @@ config-init-colt() {
 }
 
 config-init-scd
-config-init-mcd # how to run scripts in bash if you're incompetant like moi
+config-init-mcd
 config-init-colt
 
-seth send $PIP 'poke(bytes32)' $(seth --to-uint256 1)
-
-seth send $PIP_OMG 'poke(bytes32)' '12o3c33323423400000000000000000000000000000000000000000000000000'
+ilk=$NAME
+# TODO need to set PIP_USDT from deploy-spell
+seth send $PIP_USDT 'poke(bytes32)' $(seth --to-uint256 1)
 
 seth send $MCD_SPOT 'poke(bytes32)' "$ilk"

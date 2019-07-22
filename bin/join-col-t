@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+set -e
+
+# This function transfers the tokens from COLT -> COLT adapter contract
+# COLT adapter must be approved to transfer prior to moving the tokens
+
+config-init-scd() {
+  path=${SCD_CONFIG:-$1}
+  if [[ ! -e "$path" ]]; then
+    echo "Config file not found: $path not found"
+    exit 1
+  fi
+  exports=$(cat $path | jq -r ".deploy_data // . | \
+    to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]")
+  for e in $exports; do export "$e"; done
+}
+
+config-init-mcd() {
+  path=${MCD_CONFIG:-$1}
+  if [[ ! -e "$path" ]]; then
+    echo "Config file not found: $path not found"
+    exit 1
+  fi
+  exports=$(cat $path | jq -r ".deploy_data // . | \
+    to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]")
+  for e in $exports; do export "$e"; done
+}
+
+config-init-colt() {
+  path=${COLT_CONFIG:-$1}
+  if [[ ! -e "$path" ]]; then
+    echo "Config file not found: $path not found"
+    exit 1
+  fi
+  echo ${COLT_CONFIG}
+  exports=$(cat $path | jq -r ".deploy_data // . | \
+    to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]")
+  for e in $exports; do export "$e"; done
+}
+
+config-init-scd
+config-init-mcd # how to run scripts in bash if you're incompetant like moi
+config-init-colt
+
+echo $USDT
+ILK=$NAME
+urn=$ETH_FROM
+export JOIN=0x1129751170e8e4a2694903bf54ed46cbea69be98
+
+BALANCE=$(seth call $USDT "balanceOf(address)(uint256)" $ETH_FROM)
+
+echo "Current Balance $(seth --to-dec ${BALANCE})"
+
+# export JOIN value
+# export JOIN=0xd9d27d87b4e2bfd19ec7edf782cf427fa312a5c9
+seth call $JOIN 'gem()'
+
+#mcd --gem-approve $join $1
+
+#do an allowance check first if possible
+
+seth send "$TOKEN" "approve(address,uint)" $JOIN $(seth --to-uint256 $(echo "5000000"*10^45 | bc))
+
+#urn=$(mcd --get-urn gem)
+
+sig="allowance(address,address)"
+wad=$(seth call "${TOKEN}" "$sig" $ETH_FROM $JOIN)
+
+echo "Allowance ${wad}"
+
+export urn=$ETH_FROM
+
+export wad=$BALANCE
+
+seth send "$JOIN" "join(address, uint)" $urn $wad
+
+#[[ $SETH_ASYNC != yes ]] && mcd gem balance
+
+sig="gem(bytes32,address)(uint256)"
+echo "$(seth call ${MCD_VAT?} "$sig" "$ILK" "$urn")"
+

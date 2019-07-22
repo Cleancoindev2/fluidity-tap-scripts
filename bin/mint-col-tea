@@ -19,6 +19,6 @@ config-init-colt() {
 
 config-init-colt
 
-seth send $TOKEN 'mint(address,uint256)' $ETH_FROM $(seth --to-uint256 5000000000000)
+seth send $TOKEN 'mint(address,uint256)' $ETH_FROM $(seth --to-uint256 100000000)
 
 echo "Balance of ${ETH_FROM} is $(seth --to-dec $(seth call $USDT "balanceOf(address)(uint256)" $ETH_FROM))"
