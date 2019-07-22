@@ -3,6 +3,7 @@ pragma solidity 0.5.10;
 import "./ERC20Detailed.sol";
 import "./ERC20Burnable.sol";
 import "./ERC20Mintable.sol";
+import "./Ownable.sol";
 
 /**
   * @notice Represents value that will be stored in a MCD
@@ -10,14 +11,14 @@ import "./ERC20Mintable.sol";
   * @dev inherits ERC20Detailed, ERC20Burnable, ERC20Mintable
   * @dev deployer is the owner to start
   */
-contract ColTea is ERC20Detailed, ERC20Burnable, ERC20Mintable {
+contract ColTea is ERC20Detailed, ERC20Burnable, ERC20Mintable, Ownable {
 
     // Parameters provided in the constructor
     bytes9 public cusip;
     uint256 public totalFaceValue;
     uint256 public maturityDate;
-    address public custodianAddress;     // TODO this might have to be a bytes32 for an alphanumeric string
-    uint256 public custodianIdentifier; // TODO determine the length to see if uint256 can be smaller
+    address public custodianAddress;
+    uint256 public custodianIdentifier;
 
     /**
     * @notice The constructor for the ColTea.
@@ -47,5 +48,21 @@ contract ColTea is ERC20Detailed, ERC20Burnable, ERC20Mintable {
         maturityDate = _maturityDate;
         custodianAddress = _custodianAddress;
         custodianIdentifier = _custodianIdentifier;
+    }
+
+    /**
+     * @dev Override to only be done by owner.
+     *
+     */
+    function burn(uint256 amount) public onlyOwner {
+        _burn(msg.sender, amount);
+    }
+
+    /**
+     * @dev Override to only be done by owner.
+     *
+     */
+    function burnFrom(address account, uint256 amount) public onlyOwner {
+        _burnFrom(account, amount);
     }
 }

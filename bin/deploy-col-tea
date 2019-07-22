@@ -1,20 +1,53 @@
 #!/usr/bin/env bash
 
-# shellcheck source=bin/lib/common.sh
-# . "${LIB_DIR:-$(cd "${0%/*}/lib"&&pwd)}/common.sh"
+# Creates ColTea token using dapp.tools ensure that ColTea extract was already run
 
-export ETH_FROM="0x16fb96a5fa0427af0c8f7cf1eb4870231c8154b6"
+CWD="${0%/*}"
 
-export USDT="0xC6708b267177197b15D66689C9EbFb220F286Ba5"
-# ${ETH_FROM:-$(seth rpc eth_coinbase)}
+function write_json_colt {
+  if [ -z "$1" ]; then
+    echo "No output file passed. Use write_json path/to/file.json"
+    exit 1
+  fi
 
-# dappBuild
+  echo "Publishing output into $1"
+  cat > $1 <<- EOM
 
-# create the USDT token for now + PIP_USDT ie DSValue
-# test -z "$USDT" && USDT=$(dapp create USDT "$(seth --to-uint256 "$(seth --to-wei 1000000 ETH)")")
-test -z "$PIP_USDT" && PIP_USDT=$(dapp create DSValue)
-export USDT
-export PIP_USDT
+{
+  "TOKEN": "$TOKEN",
+  "USDT": "$USDT",
+  "DECIMALS": "$DECIMALS",
+  "NAME": "$NAME"
+}
+EOM
+}
 
-# shellcheck source=/dev/null
-source "$BIN_DIR/deploy-ilk" "USDT" "${1:-"A"}" "GemJoin3" 2
+
+
+echo "building may take a while don't exit"
+
+dapp --use solc:0.5.10 build --extract
+
+# ${CUSIP#0x}
+
+USDT=$(seth send --create out/ColTea.bin 'ColTea(string memory,string memory,uint8,bytes9,uint256,uint256,address,uint256)' "USDT" "T" 6 0x393132373934534c34 1 1 0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef 2)
+
+export TOKEN=$USDT
+
+echo "token address is ${USDT} and name is USDT"
+# echo out the key params of the token that will be fed to other parts later on
+
+NAME=$(seth --to-bytes32 "$(seth --from-ascii "USDT")")
+echo "bytes32 name is ${NAME}"
+
+echo "supply is $(seth --to-dec $(seth call $USDT "totalSupply()"))"
+
+echo "balance of ${ETH_FROM} is $(seth --to-dec $(seth call $USDT "balanceOf(address)(uint256)" $ETH_FROM))"
+
+export DECIMALS=$(seth call $USDT "decimals()")
+echo "Decimals is $(seth --to-dec ${DECIMALS})"
+
+
+OUT=$(cd "${CWD}/../out" && pwd)
+
+write_json_colt "$OUT/addressesColT.json"

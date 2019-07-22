@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+config-init-scd() {
+  path=${SCD_CONFIG:-$1}
+  if [[ ! -e "$path" ]]; then
+    echo "Config file not found: $path not found"
+    exit 1
+  fi
+  exports=$(cat $path | jq -r ".deploy_data // . | \
+    to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]")
+  for e in $exports; do export "$e"; done
+}
+
+config-init-mcd() {
+  path=${MCD_CONFIG:-$1}
+  if [[ ! -e "$path" ]]; then
+    echo "Config file not found: $path not found"
+    exit 1
+  fi
+  exports=$(cat $path | jq -r ".deploy_data // . | \
+    to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]")
+  for e in $exports; do export "$e"; done
+}
+
+config-init-colt() {
+  path=${COLT_CONFIG:-$1}
+  if [[ ! -e "$path" ]]; then
+    echo "Config file not found: $path not found"
+    exit 1
+  fi
+  echo ${COLT_CONFIG}
+  exports=$(cat $path | jq -r ".deploy_data // . | \
+    to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]")
+  for e in $exports; do export "$e"; done
+}
+
+config-init-scd
+config-init-mcd # how to run scripts in bash if you're incompetant like moi
+config-init-colt
+
+seth send $PIP 'poke(bytes32)' $(seth --to-uint256 1)
+
+seth send $PIP_OMG 'poke(bytes32)' '12o3c33323423400000000000000000000000000000000000000000000000000'
+
+seth send $MCD_SPOT 'poke(bytes32)' "$ilk"
