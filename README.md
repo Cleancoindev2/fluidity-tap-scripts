@@ -40,9 +40,6 @@ Mint tokens for ColTea by ETH_FROM
 ```bash
 ./bin/mint-col-tea
 ```
-
-Step 5.
-Make some calls to ensure that this ilk is recognized
 _______________________________________________
 
 ## Interacting with MCD
@@ -60,11 +57,10 @@ $(seth call ${MCD_VAT?} "$sig" "$ILK" "$urn")
 there shouldn't be tokens in the CDP engine yet
 
 2. Ensure that a spot price is set. Additional steps for updating prices are available in the bottom section "Interacting with the Price Feed".
-```
+
+```bash
 ./bin/poke-pip-col-t
 ```
-
-
 
 2. Lock the USDT Adapter tokens not into the VAT and withdraw X dai. X dai < less than collateralization ratio set up
 
