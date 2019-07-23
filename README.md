@@ -38,7 +38,7 @@ Incorporates the collateral type into the testchain MCD system
 ./bin/deploy-spell
 ```
 Step 4.
-Mint tokens for FluidityTapToken by ETH_FROM
+Mint tokens for FluidityTapToken for the primary account
 
 ```bash
 ./bin/mint-fluidity-tap
@@ -105,7 +105,7 @@ the USTR. It's still in the adapter format.
 
 ## Interacting with the Price Feed
 
-In the first part when deploying fluidity-tap, there is a PIP_USTR contract deployed. This script will update PIP as well as ensure that the SPOT price is updated as well.
+In the first part when deploying fluidity-tap, price feed contract created. This script will update the price as well as ensure that the spot price is updated as well.
 
 ```bash
 ./bin/poke-pip-fluidity-tap
