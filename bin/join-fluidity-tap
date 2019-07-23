@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+set -e
+
+# This function transfers the tokens from FluidityToken -> FluidityToken adapter contract
+# FluidityToken adapter must be approved and whitelisted to transfer prior to moving the tokens
+
+config-init-scd() {
+  path=${SCD_CONFIG:-$1}
+  if [[ ! -e "$path" ]]; then
+    echo "Config file not found: $path not found"
+    exit 1
+  fi
+  exports=$(cat $path | jq -r ".deploy_data // . | \
+    to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]")
+  for e in $exports; do export "$e"; done
+}
+
+config-init-mcd() {
+  path=${MCD_CONFIG:-$1}
+  if [[ ! -e "$path" ]]; then
+    echo "Config file not found: $path not found"
+    exit 1
+  fi
+  exports=$(cat $path | jq -r ".deploy_data // . | \
+    to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]")
+  for e in $exports; do export "$e"; done
+}
+
+config-init-colt() {
+  path=${COLT_CONFIG:-$1}
+  if [[ ! -e "$path" ]]; then
+    echo "Config file not found: $path not found"
+    exit 1
+  fi
+  echo ${COLT_CONFIG}
+  exports=$(cat $path | jq -r ".deploy_data // . | \
+    to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]")
+  for e in $exports; do export "$e"; done
+}
+
+config-init-scd
+config-init-mcd # how to run scripts in bash if you're incompetant like moi
+config-init-colt
+
+echo "USTR is $USTR"
+ILK=$NAME
+urn=$ETH_FROM
+
+BALANCE=$(seth call $USTR "balanceOf(address)(uint256)" $ETH_FROM)
+
+echo "Current Balance $(seth --to-dec ${BALANCE})"
+
+echo "Current gem for JOIN is $(seth call $JOIN 'gem()')"
+
+#do an allowance check first if possible
+
+echo "Sending approve of a very large number"
+seth send "$TOKEN" "approve(address,uint)" $JOIN $(seth --to-uint256 $(echo "5000000"*10^45 | bc))
+
+#urn=$(mcd --get-urn gem)
+echo "Checking the allowance and outputting it"
+sig="allowance(address,address)"
+wad=$(seth call "${TOKEN}" "$sig" $ETH_FROM $JOIN)
+
+echo "Allowance ${wad}"
+
+# In addition to approve, the JOIN addresses needs to be whitelisted as well to become a recipient
+echo "Sending adding whitelist for JOIN"
+seth send "$TOKEN" "addWhitelisted(address)" $JOIN
+
+export urn=$ETH_FROM
+
+export wad=$BALANCE
+
+echo "Sending join call to move the entire balance from ETH_FROM to JOIN"
+seth send "$JOIN" "join(address, uint)" $urn $wad
+
+sig="gem(bytes32,address)(uint256)"
+
+echo "Amount of GEM $(seth --to-dec $(seth call ${MCD_VAT?} "$sig" "$ILK" "$urn"))"
+
