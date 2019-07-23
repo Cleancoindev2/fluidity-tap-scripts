@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+
+seth send $USDT 'burn(address,uint256)(bool)' $ETH_FROM 100000
+seth send $TOKEN 'burn(uint256)' $(seth --to-uint256 5000)

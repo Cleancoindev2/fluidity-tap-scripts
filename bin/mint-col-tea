@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+#Mint tokesn for ColTea by ETH_FROM
+
+# if we want the amount to be minted to be dynamic create a user inputted and check
+# check that it's a actual number
+
+config-init-colt() {
+  path=${COLT_CONFIG:-$1}
+  if [[ ! -e "$path" ]]; then
+    echo "Config file not found: $path not found"
+    exit 1
+  fi
+  echo ${COLT_CONFIG}
+  exports=$(cat $path | jq -r ".deploy_data // . | \
+    to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]")
+  for e in $exports; do export "$e"; done
+}
+
+config-init-colt
+
+seth send $TOKEN 'mint(address,uint256)' $ETH_FROM $(seth --to-uint256 100000000)
+
+echo "Balance of ${ETH_FROM} is $(seth --to-dec $(seth call $USDT "balanceOf(address)(uint256)" $ETH_FROM))"
