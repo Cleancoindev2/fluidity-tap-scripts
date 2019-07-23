@@ -1,5 +1,5 @@
 # Fluidity TAP Scripts: Interacting with MCD
-This repository contains scripts to use the MCD system with a custom collateral type. It assumes familiarity with dapp tools and installations. This is a work in progress.
+[Fluidity Tokenized Asset Portfolio (TAP)](https://tap.fluidity.io/) is a model to obtain leverage on real world assets using the MakerDAO Multi-Collateral Dai (MCD) credit system. This repository contains scripts to use MCD with a custom collateral type. It assumes familiarity with dapp tools and installations and is a work in progress.
 
 ## Deploying to MakerDAO Testchain
 
