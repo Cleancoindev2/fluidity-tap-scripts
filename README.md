@@ -1,28 +1,21 @@
-NOTE: WORK IN PROGRESS - NOT COMPLETE
+# Fluidity TAP Scripts: Interacting with MCD
+This repository contains scripts to use the MCD system with a custom collateral type. It assumes familiarity with dapp tools and installations. This is a work in progress.
 
+## Deploying to MakerDAO Testchain
 
-This document contains a consolidation of scripts to interact with the MCD system with a custom collateral type. It assumes familiarily with dapp tools and the installation for now. More details will be added.
-
+### Step 1. Clone and run
 
 ```
+git clone https://github.com/makerdao/testchain
+cd testchain
 export MCD_CONFIG=~/testchain/out/addresses-mcd.json
 export SCD_CONFIG=~/testchain/out/addresses.json
+scripts/launch
 ```
 
-## Deploying to Testchain
+This runs a Ganache instance at localhost:2000. All deployed addresses are stored in the `test-chain/out/*.json file`.
 
-Step 1.
-git clone `https://github.com/makerdao/test-chain`
-
-`cd test-chain`
-
-Run `scripts/launch`
-
-That will create a Ganache instance running at localhost:2000. In addition, all deployed addresses are stored in the `test-chain/out/*.json file`.
-
-
-Step 2.
-Build the ERC20 token and deploy contract address
+### Step 2. Build and deploy the token
 
 ```./bin/deploy-col-tea
    export COLT_CONFIG=~/col-tea-scripts/out/addressesColtT.json
