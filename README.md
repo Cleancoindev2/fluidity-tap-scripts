@@ -24,13 +24,15 @@ That will create a Ganache instance running at localhost:2000. In addition, all 
 Step 2.
 Build the ERC20 token and deploy contract address
 
-```./bin/deploy-col-tea
-   export COLT_CONFIG=~/col-tea-scripts/out/addressesColtT.json
+```
+./bin/deploy-col-tea
+export COLT_CONFIG=~/col-tea-scripts/out/addressesColtT.json
 ```
 Step 3.
 Incorporates the collateral type into the testchain
 
-```./bin/deploy-spell
+``
+./bin/deploy-spell
 ```
 Step 4.
 Mint tokens for ColTea by ETH_FROM
