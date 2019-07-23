@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-
-dink2=$(seth --to-uint256 $(seth --to-hex $wad))
-
-dart3=$(seth --to-uint256 '0x9c40')
-sig="frob(bytes32, address, address, address, int, int)"
-seth send ${MCD_VAT} "$sig" "$ILK" "$urn" "$urn" "$urn" "$dink2" "$dart3"
-
-seth send ${MCD_VAT} "$sig" "$ILK" "$urn" "$urn" "$urn" "$dink2" "$dart3"

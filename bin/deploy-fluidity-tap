@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+# Creates Fluidity tap token using dapp.tools.
+
+CWD="${0%/*}"
+
+function write_json {
+  if [ -z "$1" ]; then
+    echo "No output file passed. Use write_json path/to/file.json"
+    exit 1
+  fi
+
+  echo "Publishing output into $1"
+  cat > $1 <<- EOM
+
+{
+  "TOKEN": "$TOKEN",
+  "USTR": "$USTR",
+  "DECIMALS": "$DECIMALS",
+  "NAME": "$NAME"
+}
+EOM
+}
+
+echo "building may take a while don't exit"
+
+dapp --use solc:0.5.10 build --extract
+
+USTR=$(seth send --create out/FluidityTap.bin 'FluidityTap(string memory,string memory,uint8,bytes9,uint256,uint256,bytes32,uint256)' "US Treasuries" "USTR" 6 0x393132373934534c34 1 1 42726f6b65726167655f6e616d65000000000000000000000000000000000000 2222222)
+
+export TOKEN=$USTR
+
+echo "token address is ${USTR} and name is USTR"
+
+NAME=$(seth --to-bytes32 "$(seth --from-ascii "USTR-A")")
+echo "bytes32 name is ${NAME}"
+
+echo "supply is $(seth --to-dec $(seth call $USTR "totalSupply()"))"
+
+echo "balance of ${ETH_FROM} is $(seth --to-dec $(seth call $USTR "balanceOf(address)(uint256)" $ETH_FROM))"
+
+export DECIMALS=$(seth call $USTR "decimals()")
+echo "Decimals is $(seth --to-dec ${DECIMALS})"
+
+
+OUT=$(cd "${CWD}/../out" && pwd)
+
+write_json "$OUT/addresses-fluiditytap.json"
