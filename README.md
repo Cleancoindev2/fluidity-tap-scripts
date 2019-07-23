@@ -4,7 +4,7 @@ NOTE: WORK IN PROGRESS - NOT COMPLETE
 This document contains a consolidation of scripts to interact with the MCD system with a custom collateral type. It assumes familiarily with dapp tools and the installation for now. More details will be added.
 
 
-```
+```bash
 export MCD_CONFIG=~/testchain/out/addresses-mcd.json
 export SCD_CONFIG=~/testchain/out/addresses.json
 ```
@@ -24,19 +24,21 @@ That will create a Ganache instance running at localhost:2000. In addition, all 
 Step 2.
 Build the ERC20 token and deploy contract address
 
-```
+```bash
 ./bin/deploy-col-tea
 export COLT_CONFIG=~/col-tea-scripts/out/addressesColtT.json
 ```
 Step 3.
 Incorporates the collateral type into the testchain
 
-``
+```bash
 ./bin/deploy-spell
 ```
 Step 4.
 Mint tokens for ColTea by ETH_FROM
-```./bin/mint-col-tea
+
+```bash
+./bin/mint-col-tea
 ```
 
 Step 5.
@@ -48,7 +50,7 @@ _______________________________________________
 
 1. Convert all of the USDT to the USDT Adapter
 
-```
+```bash
 ./bin/join-col-t
 ```
 
