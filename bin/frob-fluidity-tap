@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+config-init-mcd() {
+  path=${MCD_CONFIG:-$1}
+  if [[ ! -e "$path" ]]; then
+    echo "Config file not found: $path not found"
+    exit 1
+  fi
+  exports=$(cat $path | jq -r ".deploy_data // . | \
+    to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]")
+  for e in $exports; do export "$e"; done
+}
+
+config-init-colt() {
+  path=${COLT_CONFIG:-$1}
+  if [[ ! -e "$path" ]]; then
+    echo "Config file not found: $path not found"
+    exit 1
+  fi
+  echo ${COLT_CONFIG}
+  exports=$(cat $path | jq -r ".deploy_data // . | \
+    to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]")
+  for e in $exports; do export "$e"; done
+}
+
+config-init-mcd
+config-init-colt
+
+export dink=$(seth --to-uint256 $1)
+export dart=$(seth --to-uint256 $2)
+
+urn=$ETH_FROM
+ILK=$NAME
+
+sig="frob(bytes32, address, address, address, int, int)"
+seth send ${MCD_VAT} "$sig" "$ILK" "$urn" "$urn" "$urn" "$dink" "$dart"

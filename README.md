@@ -1,6 +1,15 @@
 # Fluidity TAP Scripts: Interacting with MCD
 [Fluidity Tokenized Asset Portfolio (TAP)](https://tap.fluidity.io/) is a model to obtain leverage on real world assets using the MakerDAO Multi-Collateral Dai (MCD) credit system. This repository contains scripts to use MCD with a custom collateral type. It assumes familiarity with dapp tools and installations and is a work in progress.
 
+Specifically that a .sethrc file should contain
+```
+export ETH_FROM=0x
+export ETH_KEYSTORE=path/secret/keystore
+export ETH_PASSWORD=path/secret/secretpassword
+export ETH_RPC_URL=http://localhost:8545
+export ETH_GAS=7000000
+```
+
 ## Deploying to MakerDAO Testchain
 
 
@@ -96,7 +105,7 @@ the USTR. It's still in the adapter format.
 
 ## Interacting with the Price Feed
 
-In the first part when deploying fluidity-tap, there is a PIP_USTR contract deployed. This contract can take in prices.
+In the first part when deploying fluidity-tap, there is a PIP_USTR contract deployed. This script will update PIP as well as ensure that the SPOT price is updated as well.
 
 ```bash
 ./bin/poke-pip-fluidity-tap

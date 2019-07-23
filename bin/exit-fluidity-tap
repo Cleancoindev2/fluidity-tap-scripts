@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+config-init-colt() {
+  path=${COLT_CONFIG:-$1}
+  if [[ ! -e "$path" ]]; then
+    echo "ColT Config file not found: $path not found"
+    exit 1
+  fi
+  echo ${COLT_CONFIG}
+  exports=$(cat $path | jq -r ".deploy_data // . | \
+    to_entries|map(\"\(.key)=\(.value|tostring)\")|.[]")
+  for e in $exports; do export "$e"; done
+}
+
+config-init-colt
+
+# Ensure JOIN is set
+
+wad=$(seth --to-word $1)
+sig="exit(address, uint)"
+seth send $JOIN "$sig" "$urn" "$wad"
