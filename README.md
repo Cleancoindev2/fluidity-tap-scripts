@@ -98,7 +98,7 @@ the FluidityTap adapter tokens from the CDP engine.
 ./bin/exit-fluidity-tap
 ```
 
-7. FluidityTap should now be in the wallet and can be burned once.
+7. FluidityTap should now be in the wallet and can be burned once the real world assets are sold.
 
 ```bash
 ./bin/burn-fluidity-tap
