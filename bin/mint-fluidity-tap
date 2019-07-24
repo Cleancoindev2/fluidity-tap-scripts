@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#Mint tokesn for Fluidity by ETH_FROM
+#Mint tokens for Fluidity by ETH_FROM
 
 # if we want the amount to be minted to be dynamic create a user inputted and check
 # check that it's a actual number
