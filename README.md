@@ -1,11 +1,12 @@
 # Fluidity TAP Scripts: Interacting with MCD
 [Fluidity Tokenized Asset Portfolio (TAP)](https://tap.fluidity.io/) is a model to obtain leverage on real world assets using the MakerDAO Multi-Collateral Dai (MCD) credit system. This repository contains scripts to use MCD with a custom collateral type. It assumes familiarity with dapp tools and installations and is a work in progress.
 
-More information on the MaderDao MCD terminology can be found: https://github.com/makerdao/developerguides/blob/master/mcd/mcd-101/mcd-101.md
+More information on the MakerDAO MCD terminology can be found: https://github.com/makerdao/developerguides/blob/master/mcd/mcd-101/mcd-101.md
 More information on the dapp.tools can be found: https://dapp.tools/
 
-Specifically that a .sethrc file should contain
-```
+Specifically that a .sethrc file should contain the following parameters
+
+```bash
 export ETH_FROM=0x
 export ETH_KEYSTORE=path/secret/keystore
 export ETH_PASSWORD=path/secret/secretpassword
@@ -41,7 +42,7 @@ Adds the collateral type into the testchain MCD system.
 ./bin/deploy-spell
 ```
 Step 4.
-Mint tokens for FluidityTapToken for the primary account
+Mint tokens for FluidityTapToken for the primary account.
 
 ```bash
 ./bin/mint-fluidity-tap
@@ -57,7 +58,7 @@ _______________________________________________
 ./bin/join-fluidity-tap
 ```
 
-there shouldn't be tokens in the CDP engine yet. The tokens have merely moved from the deployer's address inot the Adapter contract.
+there shouldn't be tokens in the CDP engine yet. The tokens have merely moved from the deployer's address into the Adapter contract.
 
 2. Ensure that a spot price is set. Additional steps for updating prices are available in the bottom section "Interacting with the Price Feed".
 
@@ -65,13 +66,13 @@ there shouldn't be tokens in the CDP engine yet. The tokens have merely moved fr
 ./bin/poke-pip-fluidity-tap
 ```
 
-2. Lock the FluidityTap Adapter tokens into the CDP engine and withdraw X dai. X dai < less than collateralization ratio set up. THe default value in these scripts is 110%.
+2. Lock the FluidityTap Adapter tokens into the CDP engine and withdraw X Dai. X Dai < less than collateralization ratio set up. The default value in these scripts is 110%.
 
 ```bash
 ./bin/frob-fluidity-tap
 ```
 
-3.  Remove the X dai and place it into your account. At this point the collateral is locked in MCD system and your external wallet will have Dai
+3.  Remove the X Dai and place it into your account. At this point the collateral is locked in MCD system and your external wallet will have Dai.
 
 ```bash
 ./bin/exit-dai
