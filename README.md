@@ -4,7 +4,7 @@
 More information on the MakerDAO MCD terminology can be found: https://github.com/makerdao/developerguides/blob/master/mcd/mcd-101/mcd-101.md
 More information on the dapp.tools can be found: https://dapp.tools/
 
-Specifically that a .sethrc file should contain
+Specifically that a .sethrc file should contain the following parameters
 
 ```bash
 export ETH_FROM=0x
@@ -42,7 +42,7 @@ Adds the collateral type into the testchain MCD system.
 ./bin/deploy-spell
 ```
 Step 4.
-Mint tokens for FluidityTapToken for the primary account
+Mint tokens for FluidityTapToken for the primary account.
 
 ```bash
 ./bin/mint-fluidity-tap
@@ -66,13 +66,13 @@ there shouldn't be tokens in the CDP engine yet. The tokens have merely moved fr
 ./bin/poke-pip-fluidity-tap
 ```
 
-2. Lock the FluidityTap Adapter tokens into the CDP engine and withdraw X Dai. X Dai < less than collateralization ratio set up. THe default value in these scripts is 110%.
+2. Lock the FluidityTap Adapter tokens into the CDP engine and withdraw X Dai. X Dai < less than collateralization ratio set up. The default value in these scripts is 110%.
 
 ```bash
 ./bin/frob-fluidity-tap
 ```
 
-3.  Remove the X Dai and place it into your account. At this point the collateral is locked in MCD system and your external wallet will have Dai
+3.  Remove the X Dai and place it into your account. At this point the collateral is locked in MCD system and your external wallet will have Dai.
 
 ```bash
 ./bin/exit-dai
