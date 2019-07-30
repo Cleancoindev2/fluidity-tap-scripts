@@ -114,3 +114,7 @@ In the first part when deploying fluidity-tap, price feed contract created. This
 ```bash
 ./bin/poke-pip-fluidity-tap
 ```
+------------------------------------------------------------------------------
+
+## Contact Us
+Fluidity is a financial technology company based in Brooklyn, New York, on a mission to rebuild finance using blockchain technology. Reach us at team@fluidity.io for any inquiries related to this repository, the Tokenized Asset Portfolio (TAP), or working with our team.
